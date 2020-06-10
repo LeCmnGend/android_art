@@ -965,7 +965,7 @@ class EncodedArrayValueIterator {
  private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(EncodedArrayValueIterator);
 };
-std::ostream& operator<<(std::ostream& os, const EncodedArrayValueIterator::ValueType& code);
+std::ostream& operator<<(std::ostream& os, EncodedArrayValueIterator::ValueType code);
 
 class EncodedStaticFieldValueIterator : public EncodedArrayValueIterator {
  public:
@@ -978,7 +978,6 @@ class EncodedStaticFieldValueIterator : public EncodedArrayValueIterator {
  private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(EncodedStaticFieldValueIterator);
 };
-std::ostream& operator<<(std::ostream& os, const EncodedStaticFieldValueIterator::ValueType& code);
 
 class CallSiteArrayValueIterator : public EncodedArrayValueIterator {
  public:
@@ -993,7 +992,6 @@ class CallSiteArrayValueIterator : public EncodedArrayValueIterator {
  private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(CallSiteArrayValueIterator);
 };
-std::ostream& operator<<(std::ostream& os, const CallSiteArrayValueIterator::ValueType& code);
 
 }  // namespace art
 
