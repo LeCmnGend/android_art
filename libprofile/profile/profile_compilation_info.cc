@@ -2001,10 +2001,7 @@ bool ProfileCompilationInfo::OfflineProfileMethodInfo::operator==(
 
 bool ProfileCompilationInfo::IsEmpty() const {
   DCHECK_EQ(info_.empty(), profile_key_map_.empty());
-  // Note that this doesn't look at the bitmap region, so we will return true
-  // when the profile contains only non-hot methods. This is generally ok
-  // as for speed-profile to be useful we do need hot methods and resolved classes.
-  return GetNumberOfMethods() == 0 && GetNumberOfResolvedClasses() == 0;
+  return info_.empty();
 }
 
 ProfileCompilationInfo::InlineCacheMap*
