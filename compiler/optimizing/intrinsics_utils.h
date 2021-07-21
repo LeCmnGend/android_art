@@ -89,6 +89,34 @@ class IntrinsicSlowPath : public TSlowPathCode {
   DISALLOW_COPY_AND_ASSIGN(IntrinsicSlowPath);
 };
 
+static inline bool IsVarHandleGetAndBitwiseOp(HInvoke* invoke) {
+  switch (invoke->GetIntrinsic()) {
+    case Intrinsics::kVarHandleGetAndBitwiseOr:
+    case Intrinsics::kVarHandleGetAndBitwiseOrAcquire:
+    case Intrinsics::kVarHandleGetAndBitwiseOrRelease:
+    case Intrinsics::kVarHandleGetAndBitwiseXor:
+    case Intrinsics::kVarHandleGetAndBitwiseXorAcquire:
+    case Intrinsics::kVarHandleGetAndBitwiseXorRelease:
+    case Intrinsics::kVarHandleGetAndBitwiseAnd:
+    case Intrinsics::kVarHandleGetAndBitwiseAndAcquire:
+    case Intrinsics::kVarHandleGetAndBitwiseAndRelease:
+      return true;
+    default:
+      return false;
+  }
+}
+
+static inline bool IsVarHandleGetAndAdd(HInvoke* invoke) {
+  switch (invoke->GetIntrinsic()) {
+    case Intrinsics::kVarHandleGetAndAdd:
+    case Intrinsics::kVarHandleGetAndAddAcquire:
+    case Intrinsics::kVarHandleGetAndAddRelease:
+      return true;
+    default:
+      return false;
+  }
+}
+
 }  // namespace art
 
 #endif  // ART_COMPILER_OPTIMIZING_INTRINSICS_UTILS_H_
