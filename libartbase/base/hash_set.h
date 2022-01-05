@@ -259,6 +259,44 @@ class HashSet {
     other.data_ = nullptr;
   }
 
+  // Construct with pre-existing buffer, usually stack-allocated,
+  // to avoid malloc/free overhead for small HashSet<>s.
+  HashSet(value_type* buffer, size_t buffer_size)
+      : HashSet(kDefaultMinLoadFactor, kDefaultMaxLoadFactor, buffer, buffer_size) {}
+  HashSet(value_type* buffer, size_t buffer_size, const allocator_type& alloc)
+      : HashSet(kDefaultMinLoadFactor, kDefaultMaxLoadFactor, buffer, buffer_size, alloc) {}
+  HashSet(double min_load_factor, double max_load_factor, value_type* buffer, size_t buffer_size)
+      : HashSet(min_load_factor, max_load_factor, buffer, buffer_size, allocator_type()) {}
+  HashSet(double min_load_factor,
+          double max_load_factor,
+          value_type* buffer,
+          size_t buffer_size,
+          const allocator_type& alloc)
+      : HashSet(min_load_factor, max_load_factor, HashFn(), Pred(), buffer, buffer_size, alloc) {}
+  HashSet(double min_load_factor,
+          double max_load_factor,
+          const HashFn& hashfn,
+          const Pred& pred,
+          value_type* buffer,
+          size_t buffer_size,
+          const allocator_type& alloc)
+      : allocfn_(alloc),
+        hashfn_(hashfn),
+        pred_(pred),
+        num_elements_(0u),
+        num_buckets_(buffer_size),
+        elements_until_expand_(buffer_size * max_load_factor),
+        owns_data_(false),
+        data_(buffer),
+        min_load_factor_(min_load_factor),
+        max_load_factor_(max_load_factor) {
+    DCHECK_GT(min_load_factor, 0.0);
+    DCHECK_LT(max_load_factor, 1.0);
+    for (size_t i = 0; i != buffer_size; ++i) {
+      emptyfn_.MakeEmpty(buffer[i]);
+    }
+  }
+
   // Construct from existing data.
   // Read from a block of memory, if make_copy_of_data is false, then data_ points to within the
   // passed in ptr_.
